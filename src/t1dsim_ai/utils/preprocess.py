@@ -1,4 +1,4 @@
-from utils.utils import *
+from t1dsim_ai.utils.utils import *
 import numpy as np
 from pickle import dump, load
 from sklearn.preprocessing import RobustScaler

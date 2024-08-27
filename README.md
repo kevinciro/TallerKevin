@@ -4,7 +4,7 @@ A Physiology-guided Artificial Intelligence Digital Twin Framework for Replicati
 Valentina Roquemen-Echeverri, Taisa Kushner, Peter G. Jacobs, and Clara Mosquera-Lopez
 ### Physiology-guided Artificial Intelligence Digital Twin Framework
 
-![framework](img/figure_DigitalTwinOverview.jpg)
+![framework](example/img/figure_DigitalTwinOverview.jpg)
 
 ### Package Requirements
 
@@ -17,4 +17,4 @@ Install the following dependencies:
 
 Move to the `src` folder. Run `python runDigitalTwin.py` to test the simulation of one-day scenario for both the population-level model and the digital twin. 
 
-![example](img/figure_exampleSubject_X.png)
+![example](example/img/figure_exampleSubject_X.png)

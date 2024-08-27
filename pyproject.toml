@@ -1,0 +1,67 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "t1dsim-ai"
+dynamic = ["version"]
+description = 'A Physiology-guided Artificial Intelligence Digital Twin Framework for Replicating Glucose Dynamics in Type 1 Diabetes'
+readme = "README.md"
+requires-python = ">=3.9"
+license = "MIT"
+keywords = []
+authors = [
+  { name = "Valentina Roquemen-Echeverri", email = "valentina.roquemen@udea.edu.co" },
+]
+classifiers = [
+  "Development Status :: 4 - Beta",
+  "Programming Language :: Python",
+  "Programming Language :: Python :: 3.8",
+  "Programming Language :: Python :: 3.9",
+  "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
+  "Programming Language :: Python :: Implementation :: CPython",
+  "Programming Language :: Python :: Implementation :: PyPy",
+]
+dependencies = [
+  "numpy==1.23.*",
+  "torch==1.13.0",
+  "matplotlib",
+  "scikit-learn==1.2.2",
+  "pandas==2.2.2"
+]
+
+[project.urls]
+Documentation = "https://github.com/vlt-ro/t1dsim-ai#readme"
+Issues = "https://github.com/vlt-ro/t1dsim-ai/issues"
+Source = "https://github.com/vlt-ro/t1dsim-ai"
+
+[tool.hatch.version]
+path = "src/t1dsim_ai/__about__.py"
+
+[tool.hatch.envs.types]
+extra-dependencies = [
+  "mypy>=1.0.0",
+]
+[tool.hatch.envs.types.scripts]
+check = "mypy --install-types --non-interactive {args:src/t1dsim_ai tests}"
+
+[tool.coverage.run]
+source_pkgs = ["t1dsim_ai", "tests"]
+branch = true
+parallel = true
+omit = [
+  "src/t1dsim_ai/__about__.py",
+]
+
+[tool.coverage.paths]
+t1dsim_ai = ["src/t1dsim_ai", "*/t1dsim-ai/src/t1dsim_ai"]
+tests = ["tests", "*/t1dsim-ai/tests"]
+
+[tool.coverage.report]
+exclude_lines = [
+  "no cov",
+  "if __name__ == .__main__.:",
+  "if TYPE_CHECKING:",
+]

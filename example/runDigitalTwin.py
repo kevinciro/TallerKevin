@@ -1,12 +1,14 @@
-from utils.preprocess import scale_inverse_Q1
-from Individual.individual_model import DigitalTwin
-from utils.utils import *
-from utils.utils_simulationsAI import getInitSSFromFile
+
+from t1dsim_ai.utils.preprocess import scale_inverse_Q1
+from t1dsim_ai.Individual.individual_model import DigitalTwin
+from t1dsim_ai.utils.utils import *
+from t1dsim_ai.utils.utils_simulationsAI import getInitSSFromFile
 
 import pandas as pd
 import matplotlib.pyplot as plt
 population_model_path = '../model/PopulationModel/'
 individual_model_path = '../model/IndividualModel/Model0826/'
+fileInitStates = '../model/initSteadyStates.csv'
 
 df_scenario_subj = pd.read_csv('example_subjectX.csv')
 
@@ -15,8 +17,8 @@ myDigitalTwin.setup_simulator(n_neurons_pop,hidden_compartments)
 
 initCGM = df_scenario_subj.cgm.values[0]
 with torch.no_grad():
-    x_sim_pop = myDigitalTwin.nn_solution(getInitSSFromFile(initCGM).reshape(1,-1), myDigitalTwin.u_pop[:,[0],:], None,is_pers=False)
-    x_sim_ind = myDigitalTwin.nn_solution(getInitSSFromFile(initCGM).reshape(1,-1), myDigitalTwin.u_pop[:,[0],:], myDigitalTwin.u_ind[:,[0],:],is_pers=True)
+    x_sim_pop = myDigitalTwin.nn_solution(getInitSSFromFile(initCGM,fileInitStates).reshape(1,-1), myDigitalTwin.u_pop[:,[0],:], None,is_pers=False)
+    x_sim_ind = myDigitalTwin.nn_solution(getInitSSFromFile(initCGM,fileInitStates).reshape(1,-1), myDigitalTwin.u_pop[:,[0],:], myDigitalTwin.u_ind[:,[0],:],is_pers=True)
 
 df_scenario_subj['cgm_AIPop'] = scale_inverse_Q1(x_sim_pop[:, 0, [0]],population_model_path)
 df_scenario_subj['cgm_AIDT'] = scale_inverse_Q1(x_sim_ind[:, 0, [0]],population_model_path)
@@ -87,4 +89,4 @@ ax2.set_xlim(-12*3,1*12*24+12*2)
 
 plt.subplots_adjust(hspace=0)
 
-plt.savefig('../img/figure_exampleSubject_X.png',dpi=500, bbox_inches='tight')
+plt.savefig('img/figure_exampleSubject_X.png',dpi=500, bbox_inches='tight')
