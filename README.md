@@ -15,6 +15,6 @@ Install the following dependencies:
 
 ### Example of usage
 
-Move to the `src` folder. Run `python runDigitalTwin.py` to test the simulation of one-day scenario for both the population-level model and the digital twin. 
+Move to the `src` folder. Run `python runDigitalTwin.py` to test the simulation of one-day scenario for both the population-level model and the digital twin.
 
 ![example](example/img/figure_exampleSubject_X.png)
