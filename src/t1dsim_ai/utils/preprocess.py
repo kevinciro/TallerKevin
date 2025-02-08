@@ -1,4 +1,8 @@
-from t1dsim_ai.utils.utils import *
+from t1dsim_ai.options import (
+    states_name,
+    dict_states,
+    inputs,
+)
 import numpy as np
 from pickle import dump, load
 from sklearn.preprocessing import RobustScaler
@@ -24,6 +28,13 @@ def scaler(x_est, u_id, path_scaler, train=False):
         x_est = scaler_states.transform(x_est)
         u_id = scaler_inputs.transform(u_id)
         return x_est, u_id
+
+
+def scaler_inverse(x_est, path_scaler):
+    scaler_states = load(open(path_scaler + "scaler_states.pkl", "rb"))
+    x_est = scaler_states.inverse_transform(x_est)
+
+    return x_est
 
 
 def scale_single_state(value, state, path_scaler):

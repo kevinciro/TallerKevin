@@ -12,6 +12,7 @@ license = "MIT"
 keywords = []
 authors = [
   { name = "Valentina Roquemen-Echeverri", email = "valentina.roquemen@udea.edu.co" },
+  { name = "Clara Mosquera-Lopez", email = "cmarcela.ml@gmail.com" },
 ]
 classifiers = [
   "Development Status :: 4 - Beta",
