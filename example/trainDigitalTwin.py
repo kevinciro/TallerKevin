@@ -185,7 +185,7 @@ def trainModel(
 
         df_info["train_epochs"] = NNIndividual.curr_epoch
         print(df_info.iloc[0])
-        df_info.to_csv(NNIndividual.pathModel + "/info.csv", index=False)
+        df_info.T.to_csv(NNIndividual.pathModel + "/info.csv", index=False)
 
         print("Training time:", (time.time() - initTime) / 60)
 
