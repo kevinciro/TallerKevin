@@ -3,7 +3,6 @@ from t1dsim_ai.create_scenarios import digitalTwin_scenario
 import numpy as np
 import matplotlib.pyplot as plt
 
-
 myDigitalTwin = DigitalTwin(n_digitalTwin=1)
 
 df_simulation = myDigitalTwin.simulate(

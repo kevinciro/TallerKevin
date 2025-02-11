@@ -49,7 +49,31 @@ After running the example, the simulation will look as follows:
 
 ## Creation of a Digital Twin
 
-WIP
+A digital twin model can be trained using a dataset containing CGM (Continuous Glucose Monitoring) data, sleep efficiency, heart rate, meals, insulin, and time information. An example of the required dataset structure is provided in:
+
+```
+example/example_model/data_example.csv
+```
+
+To train the model, run the following command:
+
+```bash
+python example/trainDigitalTwin.py
+```
+
+This will generate:
+
+- The trained model
+- The scaler used for preprocessing
+- Training process information
+-
+Configurable Parameters: The training process allows customization of:
+
+- Number of epochs
+- Learning rate
+- Number of neurons and depth (network architecture)
+- Batch size
+- Overlap percentage for data segmentation
 
 ## Citation
 

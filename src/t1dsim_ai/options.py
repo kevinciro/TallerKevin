@@ -30,6 +30,17 @@ states = [
     "state_Ug",
     "state_Ug2",
 ]
+states_nobs = [
+    "state_Q2",
+    "state_S1",
+    "state_S2",
+    "state_I",
+    "state_X1",
+    "state_X2",
+    "state_X3",
+    "state_Ug",
+    "state_Ug2",
+]
 
 dict_states = {
     "Q1": ["X1", "X3", "Q1", "Q2", "C2"],
