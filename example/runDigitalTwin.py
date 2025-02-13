@@ -1,23 +1,15 @@
+import pandas as pd
+
 from t1dsim_ai.individual_model import DigitalTwin
-from t1dsim_ai.create_scenarios import digitalTwin_scenario
+
 import numpy as np
 import matplotlib.pyplot as plt
 
-myDigitalTwin = DigitalTwin(n_digitalTwin=1)
 
-df_simulation = myDigitalTwin.simulate(
-    digitalTwin_scenario(
-        meal_size_array=[75, 90, 30],  # g
-        meal_time_fromStart_array=[60, 60 * 4, 60 * 11],  # min from start of simulation
-        init_cgm=80,  # mg/dL
-        basal_insulin=1,  # U/h
-        carb_ratio=12,
-        sim_time=24 * 60,
-        hr=100,  # int or array of len sim_time
-        initial_time="08:00:00",
-        exercise_time=60 * 2,
-    )
-)
+df_simulation = pd.read_csv("example_model/data_example.csv")
+
+myDigitalTwin = DigitalTwin(n_digitalTwin=0)
+df_simulation = myDigitalTwin.simulate(df_simulation.iloc[2 * 12 * 24 : 3 * 12 * 24])
 
 # Visualization
 
@@ -28,6 +20,7 @@ fig, (ax1, ax2) = plt.subplots(2, 1, figsize=(14, 7), sharex=True)
 
 time = np.arange(len(df_simulation))
 
+ax1.plot(time, df_simulation.cgm_Actual, "-", ms=5, c="k")
 ax1.plot(time, df_simulation.cgm_NNPop, ".", ms=5, c=color_AIPop)
 ax1.plot(time, df_simulation.cgm_NNDT, ".", ms=5, c=color_AIDT)
 

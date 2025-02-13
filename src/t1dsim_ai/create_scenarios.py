@@ -12,7 +12,7 @@ def digitalTwin_scenario(
     basal_insulin=1,  # U/h
     carb_ratio=12,
     sim_time=5 * 60,
-    hr=80,  # int or array of len sim_time
+    hr=70,  # int or array of len sim_time
     initial_time="08:00:00",
     bedtime=13 * 60,  # Bedtime since start simulation
     sleep_duration=8,  # Sleep duration in hours
@@ -52,7 +52,7 @@ def digitalTwin_scenario(
         12 * np.array(meal_size_array) / carb_ratio
     )
 
-    df_scenario["heart_rate"] = hr + np.random.normal(0, 5, len(df_scenario))
+    df_scenario["heart_rate"] = hr + np.random.normal(0, 2, len(df_scenario))
 
     df_scenario.loc[0, states] = dfInitStates.loc[int(init_cgm), states]
 
@@ -63,9 +63,9 @@ def digitalTwin_scenario(
         bedtime // 5 : (bedtime + sleep_duration * 60) // 5, "heart_rate"
     ] = (hr - 10 + np.random.normal(0, 1, sleep_duration * 12 + 1))
 
-    df_scenario.loc[
-        exercise_time // 5 : (exercise_time + exercise_duration * 60) // 5, "heart_rate"
-    ] = (hr + 30 + np.random.normal(0, 1, int(exercise_duration * 12) + 1))
+    # df_scenario.loc[
+    #    exercise_time // 5 : (exercise_time + exercise_duration * 60) // 5, "heart_rate"
+    # ] = (hr + 30 + np.random.normal(0, 1, int(exercise_duration * 12) + 1))
     df_scenario["heart_rate_WRTbaseline"] = df_scenario["heart_rate"] - hr
 
     return df_scenario

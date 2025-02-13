@@ -740,6 +740,12 @@ class DigitalTwin:
         )
 
     def prepare_data(self, df_scenario):
+        dfInitStates = pd.read_csv(
+            Path(__file__).parent / "models/initSteadyStates.csv"
+        ).set_index("initCGM")
+        df_scenario.loc[0, states] = dfInitStates.loc[
+            int(df_scenario.loc[0, states[0]]), states
+        ]
 
         sim_time = len(df_scenario)
         batch_start = np.array([0], dtype=np.int)
@@ -776,7 +782,16 @@ class DigitalTwin:
 
     def simulate(self, df_scenario_original):
         # Prepare data
+
         df_scenario = df_scenario_original.copy()
+        df_scenario = df_scenario.reset_index()
+        try:
+            df_scenario[states]
+        except KeyError:
+            df_scenario[states[1:]] = 0
+
+        df_scenario["cgm_Actual"] = df_scenario["output_cgm"]
+
         x0_est, u_pop, u_ind = self.prepare_data(df_scenario)
 
         with torch.no_grad():
