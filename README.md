@@ -45,7 +45,7 @@ python example/runDigitalTwin.py
 
 After running the example, the simulation will look as follows:
 
-![example](example/img/example_digitaltwin1.png)
+![example](example/img/example_digitaltwin0.png)
 
 ## Creation of a Digital Twin
 
