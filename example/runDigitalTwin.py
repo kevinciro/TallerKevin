@@ -5,25 +5,25 @@ from t1dsim_ai.individual_model import DigitalTwin
 import numpy as np
 import matplotlib.pyplot as plt
 
-
 df_simulation = pd.read_csv("example_model/data_example.csv")
-
+df_simulation = df_simulation[~df_simulation.is_train]
 myDigitalTwin = DigitalTwin(n_digitalTwin=0)
-df_simulation = myDigitalTwin.simulate(df_simulation.iloc[2 * 12 * 24 : 3 * 12 * 24])
+df_simulation = myDigitalTwin.simulate(df_simulation.iloc[1 * 12 * 24 : 2 * 12 * 24])
 
 # Visualization
 
-color_AIDT = "peru"
-color_AIPop = "#0072B2"
+color_AIDT = "#0072B2"
+color_AIPop = "#009E73"
 
 fig, (ax1, ax2) = plt.subplots(2, 1, figsize=(14, 7), sharex=True)
 
 time = np.arange(len(df_simulation))
 
-ax1.plot(time, df_simulation.cgm_Actual, "-", ms=5, c="k")
+ax1.plot(time, df_simulation.cgm_Actual, ms=5, c="k")
 ax1.plot(time, df_simulation.cgm_NNPop, ".", ms=5, c=color_AIPop)
 ax1.plot(time, df_simulation.cgm_NNDT, ".", ms=5, c=color_AIDT)
 
+ax1.plot(-1, -1, "o", ms=5, c="k", label="Actual")
 ax1.plot(-1, -1, "o", ms=5, c=color_AIPop, label="NN-based population")
 ax1.plot(-1, -1, "o", ms=5, c=color_AIDT, label="NN-based digital twin")
 
@@ -39,6 +39,8 @@ for location in ["left", "right", "top", "bottom"]:
     ax1.spines[location].set_linewidth(0.1)
 
 ax2.plot(time, df_simulation.input_insulin, c="k", lw=0.7)
+ax2.set_ylim(-1, 65)
+
 ax2.set_ylabel("Insulin [U/h]")
 for location in ["left", "right", "top", "bottom"]:
     ax2.spines[location].set_linewidth(0.1)
@@ -51,6 +53,8 @@ ax2_carbs.plot(
     "o",
     color=color,
 )
+ax2_carbs.set_ylim(-1, 65)
+
 ax2_carbs.set_ylabel("Meal carbs [g]", color=color)
 ax2_carbs.tick_params(axis="y", labelcolor=color)
 ax2_carbs.spines["right"].set_position(("axes", 0))
@@ -59,6 +63,8 @@ for location in ["left", "right", "top", "bottom"]:
 ax2_hr = ax2.twinx()
 color = "tab:green"
 ax2_hr.plot(time, df_simulation.heart_rate, lw=0.5, color=color)
+ax2_hr.set_ylim(-1.4, 147)
+
 ax2_hr.set_ylabel("Heart rate [BPM]", color=color)
 ax2_hr.tick_params(axis="y", labelcolor=color)
 for location in ["left", "right", "top", "bottom"]:
@@ -66,6 +72,7 @@ for location in ["left", "right", "top", "bottom"]:
 ax2_pa = ax2.twinx()
 color = "tab:purple"
 ax2_pa.plot(time, df_simulation.sleep_efficiency, lw=1, color=color)
+ax2_pa.set_ylim(-0.01, 1.05)
 for location in ["left", "right", "top", "bottom"]:
     ax2_pa.spines[location].set_linewidth(0)
 
@@ -81,10 +88,10 @@ ax2.set_xlim(-12 * 3, 1 * 12 * 24 + 12 * 2)
 
 plt.subplots_adjust(hspace=0)
 
-#plt.show()
+# plt.show()
 
 plt.savefig(
     "img/example_digitaltwin" + str(myDigitalTwin.n_digitalTwin) + ".png",
     dpi=500,
     bbox_inches="tight",
- )
+)

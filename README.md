@@ -37,6 +37,9 @@ pip install t1dsim-ai
 
 This work presents a novel framework for constructing physiologically-constrained NN digital twins that can replicate the glucose dynamics of individuals with T1D. We developed a novel NN state-space model architecture that allows for observability and interpretability of simulation outputs. This model adheres to known glucose-insulin dynamics as verified by our conformance verification analysis. When augmented with individual-level data, the resulting adaptive digital twin models can capture both inter- and intra-individual variability and incorporate various factors influencing glucose response, such as sleep and physical activity, leading to improved simulation accuracy when compared to ODE-based digital twins.
 
+*Note: This tool is a methodology designed to create digital twins that adapt to the specific data of the individual used for training. It is not intended for use as a virtual patient population to simulate different scenarios.*
+
+
 Run the following command to simulate one day of the digital twin #1.
 
 ```bash

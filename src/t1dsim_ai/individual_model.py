@@ -743,8 +743,11 @@ class DigitalTwin:
         dfInitStates = pd.read_csv(
             Path(__file__).parent / "models/initSteadyStates.csv"
         ).set_index("initCGM")
+
+        df_scenario[states] = df_scenario[states].astype(float)
+
         df_scenario.loc[0, states] = dfInitStates.loc[
-            int(df_scenario.loc[0, states[0]]), states
+            df_scenario.loc[0, states[0]].astype("int64"), states
         ]
 
         sim_time = len(df_scenario)
