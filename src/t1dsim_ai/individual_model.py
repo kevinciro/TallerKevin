@@ -189,7 +189,6 @@ class IndividualModel:
 
         self.pathModelFolder = pathModel
         self.pathModel = pathModel + subjectID
-        self.seq_len = 61
 
         self.split_train_test(states, inputs, input_ind)
 
@@ -252,11 +251,13 @@ class IndividualModel:
         batch_size,
         n_epochs,
         overlap=0.9,
+        seq_len = 61,
         ts=5,
         weight_decay=1e-5,
     ):
 
         # Batch extraction class
+        self.seq_len = seq_len
         self.batch = Batch(
             batch_size,
             self.seq_len,

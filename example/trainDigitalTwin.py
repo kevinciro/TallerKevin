@@ -24,6 +24,7 @@ def trainModel(
     batch_size,
     n_epochs,
     overlap,
+    seq_len,
     subj="DT1",
 ):
 
@@ -46,7 +47,7 @@ def trainModel(
     print("TRAINING SUBJECT: ", subj)
 
     NNIndividual = IndividualModel(subj, df_data_subj, personalization_path)
-    NNIndividual.setup_nn(hidden_compartments, lr, batch_size, n_epochs, overlap)
+    NNIndividual.setup_nn(hidden_compartments, lr, batch_size, n_epochs, overlap,seq_len+1)
     score = NNIndividual.fit(True)
 
     if score is np.nan:
@@ -78,8 +79,9 @@ def trainModel(
             ],
         }
 
+        print("TRAINING SUBJECT: ", subj)
         for group in ["train", "test"]:
-            batch = SequenceSelection(61, "cpu", data[group])
+            batch = SequenceSelection(seq_len+1, "cpu", data[group])
             with torch.no_grad():
                 (
                     batch_x0_hidden,
@@ -201,6 +203,7 @@ if __name__ == "__main__":
     batch_size = 32
     n_epochs = 150
     overlap = 0.9
+    seq_len = 60
 
     df_data_subj = pd.read_csv("example_model/data_example.csv")
     trainModel(
@@ -211,5 +214,6 @@ if __name__ == "__main__":
         batch_size,
         n_epochs,
         overlap,
+        seq_len,
         "DT_Example",
     )
