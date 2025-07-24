@@ -194,18 +194,31 @@ def trainModel(
 
 if __name__ == "__main__":
     # Architecture individual models
-    n_neurons = 128
+    """     n_neurons = 128
     hidden_compartments = {
         "models": [5 + len(input_ind), n_neurons, n_neurons // 2, n_neurons // 4, 1]
+        10, 128, 64, 32, 1 - 11000 parametros entrenables
+    } """
+    hidden_compartments = {
+        "models": [5 + len(input_ind), 20, 30, 40, 50, 1]
     }
+    # 10, 20, 30, 40, 50, 1 - 4191 parametros
 
     lr = 10 ** (-4)
-    batch_size = 32
     n_epochs = 150
+
+    # Default params
+    batch_size = 32
     overlap = 0.9
     seq_len = 60
 
-    df_data_subj = pd.read_csv("example_model/data_example.csv")
+    # Los datos son tomados cada 5 minutos, para 5 horas el largo de la secuencia sera de 60
+    # para  12 horas el largo de la secuencia sera de 144
+    #batch_size = 16
+    #overlap = 0.3
+    #seq_len = 144
+
+    df_data_subj = pd.read_csv("example_model/data_example_original.csv")
     trainModel(
         df_data_subj,
         "example_model/",
