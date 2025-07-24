@@ -87,7 +87,10 @@ n_neurons_pop = {
 }
 
 # Architecture individual models
-n_neurons = 128
+""" n_neurons = 128
 hidden_compartments = {
-    "models": [5 + len(input_ind), n_neurons, n_neurons // 2, n_neurons // 4, 1]
+    "models": [5 + len(input_ind), n_neurons , n_neurons // 2, n_neurons // 4, 1]
+} """
+hidden_compartments = {
+    "models": [5 + len(input_ind), 20, 30, 40, 50, 1]
 }

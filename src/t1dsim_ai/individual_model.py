@@ -25,6 +25,7 @@ from pickle import load, dump
 from librosa.util import frame
 import pandas as pd
 
+import matplotlib.pyplot as plt
 
 class WeightClipper(object):
     def __init__(self, min=-1, max=1):
@@ -94,6 +95,10 @@ class ForwardEulerSimulator(nn.Module):
 
         x_step = x0_batch
 
+        #dq1_pop_list = []
+        #dq1_ind_list = []
+        #suma_dq_list = []
+
         for step in range(u_batch.shape[0]):
             u_step = u_batch[step]
 
@@ -104,10 +109,15 @@ class ForwardEulerSimulator(nn.Module):
 
             dx_pop = self.ss_pop_model(x_step, u_step)
 
+            #dq1_pop_list.append(dx_pop[:, 0].item())
+
             dx = dx_pop
             if is_pers:
                 dx_ind = self.ss_ind_model(x_step, u_step, u_ind_step)
                 dx[:, 0] += dx_ind[:, 0]
+
+                #dq1_ind_list.append(dx_ind.item())
+                #suma_dq_list.append(dx[:, 0].item())
 
             x_step = x_step + self.ts * dx
 
@@ -118,6 +128,17 @@ class ForwardEulerSimulator(nn.Module):
                 x_step[:, 0] = self.adjust_cgm(x_step[:, 0])
 
         X_sim = torch.stack(X_sim_list, 0)
+
+        """
+        plt.title("dQ1")
+        plt.plot(dq1_ind_list, "r", label="Ind")
+        plt.plot(dq1_pop_list, "g", label="Pop")
+        plt.plot(suma_dq_list, "b", label= "Suma")
+        plt.legend()
+        plt.grid()
+        plt.show()
+        """
+
         return X_sim
 
 
@@ -326,6 +347,7 @@ class IndividualModel:
 
             # Compute fit loss
             loss = self.loss(batch_x_sim[:, :, [0]], batch_y).to(self.device)
+            #loss = self.loss_MSE(batch_x_sim[:, :, [0]], batch_y).to(self.device)
             loss_temp.append(loss.item())
 
             if self.curr_epoch < self.batch.epoch:
@@ -426,6 +448,11 @@ class IndividualModel:
         MSE_Dcgm = torch.mean((err_df) ** 2)
 
         return MSE_cgm + 10 * MSE_Dcgm
+    
+    def loss_MSE(self, y_pred, y_true):
+        err_fit = y_pred[1:, :] - y_true[1:, :]
+        MSE_cgm = torch.mean(((err_fit) ** 2))
+        return MSE_cgm
 
 
 class Batch:
@@ -690,18 +717,24 @@ class SequenceSelection:
 
 
 class DigitalTwin:
-    def __init__(self, n_digitalTwin=0, device=torch.device("cpu"), ts=5):
+    def __init__(self, n_digitalTwin=0, custom_DT = None,device=torch.device("cpu"), ts=5):
         self.ts = ts
         self.device = device
 
-        self.n_digitalTwin = n_digitalTwin
-        digitalTwin_list = [
-            f.path
-            for f in os.scandir(Path(__file__).parent / "models/IndividualModel/")
-            if f.is_dir()
-        ]
-        digitalTwin_list.sort()
-        self.digital_twin_folder = digitalTwin_list[self.n_digitalTwin]
+        if custom_DT is None:
+            self.n_digitalTwin = n_digitalTwin
+
+            digitalTwin_list = [
+                f.path
+                for f in os.scandir(Path(__file__).parent / "models/IndividualModel/")
+                if f.is_dir()
+            ]
+            digitalTwin_list.sort()
+            self.digital_twin_folder = digitalTwin_list[self.n_digitalTwin]
+        else:
+            self.digital_twin_folder  = custom_DT
+                
+        print(self.digital_twin_folder)
 
         self.setup_simulator()
 
@@ -716,12 +749,22 @@ class DigitalTwin:
             )
         )
 
+        print(hidden_compartments)
+        print(self.digital_twin_folder)
+
         # Individual Model
         ss_individual_model = CGMIndividual(hidden_compartments=hidden_compartments)
         ss_individual_model.to(self.device)
         ss_individual_model.load_state_dict(
             torch.load(self.digital_twin_folder + "/individual_model.pt")
         )
+
+        num_params = sum(p.numel() for p in ss_individual_model.parameters())
+        num_params_trainables = sum(p.numel() for p in ss_individual_model.parameters() if p.requires_grad)
+
+        print(f"Total parámetros: {num_params}")
+        print(f"Entrenables: {num_params_trainables}")
+
 
         for name, param in ss_pop_model.named_parameters():
             param.requires_grad = False

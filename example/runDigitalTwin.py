@@ -88,10 +88,11 @@ ax2.set_xlim(-12 * 3, 1 * 12 * 24 + 12 * 2)
 
 plt.subplots_adjust(hspace=0)
 
-# plt.show()
+plt.show()
 
-plt.savefig(
+""" plt.savefig(
     "img/example_digitaltwin" + str(myDigitalTwin.n_digitalTwin) + ".png",
     dpi=500,
     bbox_inches="tight",
 )
+ """
